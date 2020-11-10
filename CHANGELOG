@@ -1,0 +1,42 @@
+0.6i
+Updated to latest version of FatFree (3.6.7)
+Added PHP 7.4 compatability
+
+0.6h
+Updated TinyMCE editor
+Connect to DB in Bootstrap
+Change to SQL Sessions
+
+0.6g
+Updated page handling and deletion
+Updated to latest version of FatFree (3.6.5)
+
+0.6f
+Added template parameter for controllers
+Improved error handling
+Updated to latest version of FatFree (3.6.4)
+
+0.6e
+Changed to use composer
+Fixed new line issues
+Fixed typoes
+Updated to latest version of FatFree
+
+0.6d
+Improved validation in creating posts
+Updated to latest version of FatFree
+
+0.6c
+DEBUG mode constant is defined in debug mode (check for DEBUG being set)
+Bootstrap introduced to set up logging and debug mode
+Bug fix: Crash with error on failed DB
+
+0.6b
+Security fix: Don't display peoples passwords in their profiles
+Anti-caching technology enabled
+
+0.6a
+Some bugs were introduced
+
+0.6
+Lost the tides of time
