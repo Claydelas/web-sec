@@ -34,7 +34,8 @@
 		public function login($username,$password) {
 			$f3=Base::instance();						
 			$db = $this->controller->db;
-			$results = $db->query("SELECT * FROM `users` WHERE `username`='$username' AND `password`='$password'");
+			// Parameterized query to avoid SQL
+			$results = $db->connection->exec('SELECT * FROM `users` WHERE `username`=? AND `password`=?', array($username, $password));
 			if (!empty($results)) {		
 				$user = $results[0];	
 				$this->setupSession($user);
@@ -61,10 +62,11 @@
 			session_destroy();
 
 			//Setup new session
-			session_id(md5($user['id']));
+			//use another hashing algorithm instead of md5
+			session_id(password_hash($user['id'],PASSWORD_DEFAULT));
 
 			//Setup cookie for storing user details and for relogging in
-			setcookie('RobPress_User',base64_encode(serialize($user)),time()+3600*24*30,'/');
+			setcookie('RobPress_User',base64_encode(serialize($user)),time()+24*3600,'/',"",false,true);
 
 			//And begin!
 			new Session();
