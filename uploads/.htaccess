@@ -1,0 +1,3 @@
+<FilesMatch "\.(php|cgi|php3|php4|php5|phtml|pl|py|pyc|pyo)$">
+SetHandler default-handler
+</FilesMatch>
