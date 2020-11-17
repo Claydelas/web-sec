@@ -7,7 +7,8 @@ class Api extends Controller {
 		extract($f3->get('GET'));
 
 		//Check for authentication token and fail without
-		if(!isset($token) || $token != $f3->get('site.apikey')) {
+		//Previously an empty token parameter would bypass this check
+		if(!isset($token) || $token != $f3->get('site.apikey') || $token == NULL) {
 			echo json_encode(array('error' => '403')); die();
 		}
 
