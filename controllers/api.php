@@ -9,7 +9,12 @@ class Api extends Controller {
 		//Check for authentication token and fail without
 		//Previously an empty token parameter would bypass this check
 		if(!isset($token) || $token != $f3->get('site.apikey') || $token == NULL) {
-			echo json_encode(array('error' => '403')); die();
+			//Fail only with DEBUG mode off
+			if($this->db->connection->
+			exec("SELECT `value` from `settings` where `setting`='debug'")[0]['value'] == "0"){
+				echo json_encode(array('error' => '403'));
+				die();
+			}
 		}
 
 		//Provide API access
