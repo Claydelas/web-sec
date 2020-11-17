@@ -112,8 +112,7 @@ class Blog extends Controller {
 			$ids = $this->db->connection->exec("SELECT id FROM `posts` WHERE `title` LIKE ? OR `content` LIKE ?", array("%$search%", "%$search%"));
 			$ids = Hash::extract($ids,'{n}.id');
 			if(empty($ids)) {
-				// XSS sanitising
-				StatusMessage::add('No search results found for ' . h($search)); 
+				StatusMessage::add('No search results found for ' . $search); 
 				return $f3->reroute('/blog/search');
 			}
 

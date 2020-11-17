@@ -1,3 +1,3 @@
-<h2><?=$pagetitle?></h2>
+<h2><?=h($pagetitle) //XSS fix ?></h2>
 
 <?= eval("?>".$page); ?>

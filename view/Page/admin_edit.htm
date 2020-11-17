@@ -1,5 +1,5 @@
 <h2>Edit Page</h2>
-<h3><?=$pagetitle?></h3>
+<h3><?=h($pagetitle) //XSS fix ?></h3>
 
 <?php
 $form = new Form(); 

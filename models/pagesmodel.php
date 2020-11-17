@@ -5,6 +5,7 @@ class PagesModel {
 	/** Create a new page */
 	public function create($pagename) {
 		$pagedir = getcwd() . "/pages/";
+		//TODO Validate $pagename
 		touch($pagedir . $pagename . ".html");
 	}
 
