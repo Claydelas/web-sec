@@ -33,14 +33,12 @@
 		/** Look up user by username and password and log them in */
 		public function login($username,$password) {
 			$f3=Base::instance();						
-			$db = $this->controller->db;
-			// Parameterized query to avoid SQL
-			$results = $db->connection->exec('SELECT * FROM `users` WHERE `username`=? AND `password`=?', array($username, $password));
-			if (!empty($results)) {		
-				$user = $results[0];	
+			$user = $this->controller->Model->Users->fetch(['username' => $username, 'password' => $password]);
+			if($user){
+				$user = $user->cast();
 				$this->setupSession($user);
 				return $this->forceLogin($user);
-			} 
+			}
 			return false;
 		}
 
