@@ -15,3 +15,39 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 
 # Disable directory index listing
 Options -Indexes
+
+RedirectMatch 403 ^/config/.*$
+RedirectMatch 403 ^/controllers/.*$
+RedirectMatch 403 ^/helpers/.*$
+RedirectMatch 403 ^/models/.*$
+RedirectMatch 403 ^/ui/.*$
+RedirectMatch 403 ^/view/.*$
+RedirectMatch 403 ^/utility/.*$
+RedirectMatch 403 ^/vendor/.*$
+RedirectMatch 403 ^/tmp/.*$
+RedirectMatch 403 ^/\.git/.*$
+
+# <FilesMatch "^(?!index\.php$).+\.php$">
+# Order deny,allow
+# Deny from all
+# </FilesMatch>
+
+<FilesMatch "(\.(bak|config|cfg|dist|fla|inc|ini|log|psd|sh|sql|swp)|~)$">
+    ## Apache 2.2
+    Order allow,deny
+    Deny from all
+    Satisfy All
+
+    ## Apache 2.4
+    # Require all denied
+</FilesMatch>
+
+<FilesMatch "(VERSION|CHANGELOG|composer\.json|\.gitignore)">
+    ## Apache 2.2
+    Order allow,deny
+    Deny from all
+    Satisfy All
+
+    ## Apache 2.4
+    # Require all denied
+</FilesMatch>
