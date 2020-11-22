@@ -24,6 +24,13 @@ class AdminController extends \Controller {
 			\StatusMessage::add('Access Denied','danger');
 			return $f3->reroute('/');
 		}
+
+		//No accesss if not admin
+		if($access != $this->level){
+			//\StatusMessage::add('Access Denied','danger');
+			return $f3->error('404');
+			//return $f3->reroute('/');
+		}
 	}
 
 	public function adminMenu() {
