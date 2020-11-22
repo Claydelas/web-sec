@@ -64,7 +64,14 @@
 			session_id(password_hash($user['id'],PASSWORD_DEFAULT));
 
 			//Setup cookie for storing user details and for relogging in
-			setcookie('RobPress_User',base64_encode(serialize($user)),time()+24*3600,'/',"",false,true);
+			setcookie('RobPress_User', base64_encode(serialize($user)), [
+				'expires' => time() + 86400,
+				'path' => '/',
+				'domain' => "",
+				'secure' => false,
+				'httponly' => true,
+				'samesite' => 'Strict',
+			]);
 
 			//And begin!
 			new Session();
