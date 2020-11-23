@@ -64,8 +64,17 @@
 			session_id(md5($user['id']));
 
 			//Setup cookie for storing user details and for relogging in
-			setcookie('RobPress_User',base64_encode(serialize($user)),time()+3600*24*30,'/');
-
+			// TODO replace base64 encoding
+			// +fix expiry time, +httponly cookies, +samesite Strict
+			// secure cookies (https) don't work on local machine so false
+			setcookie('RobPress_User', base64_encode(serialize($user)), [
+				'expires' => time() + 86400,
+				'path' => '/',
+				'domain' => "",
+				'secure' => false,
+				'httponly' => true,
+				'samesite' => 'Strict',
+			]);
 			//And begin!
 			new Session();
 		}
