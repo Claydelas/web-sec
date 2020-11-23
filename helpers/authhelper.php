@@ -32,14 +32,14 @@
 
 		/** Look up user by username and password and log them in */
 		public function login($username,$password) {
-			$f3=Base::instance();						
-			$db = $this->controller->db;
-			$results = $db->query("SELECT * FROM `users` WHERE `username`='$username' AND `password`='$password'");
-			if (!empty($results)) {		
-				$user = $results[0];	
+			// uses SQL mapped object instead of direct db access to fetch a single user with matching u:p
+			$user = $this->controller->Model->Users->fetch(['username' => $username, 'password' => $password]);
+			if($user){
+				// cast to array
+				$user = $user->cast();
 				$this->setupSession($user);
 				return $this->forceLogin($user);
-			} 
+			}
 			return false;
 		}
 
