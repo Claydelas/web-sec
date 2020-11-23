@@ -60,8 +60,9 @@
 			//Remove previous session
 			session_destroy();
 
-			//Setup new session
-			session_id(md5($user['id']));
+			// Setup new session
+			// md5 hashing can be reversed, so sessions use bcrypt + salt
+			session_id(password_hash($user['id'],PASSWORD_DEFAULT));
 
 			//Setup cookie for storing user details and for relogging in
 			// TODO replace base64 encoding
