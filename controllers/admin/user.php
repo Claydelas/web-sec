@@ -9,6 +9,23 @@ class User extends AdminController {
 		$f3->set('users',$users);
 	}
 
+	public function export($f3) {
+		$users = $this->Model->Users->fetchAll();
+		$fp = fopen('export.csv', 'w');
+		foreach($users as $user) {			
+			$fields = [$user->id,$user->username,$user->displayname,$user->email,$user->password,$user->level,$user->created];
+			fputcsv($fp,$fields);
+		}
+		fclose($fp);
+		header("Content-type: text/csv");
+		header("Content-Disposition: attachment; filename=file.csv");
+		header("Pragma: no-cache");
+		header("Expires: 0");
+
+		echo file_get_contents('export.csv');
+		exit();
+	}
+
 	public function edit($f3) {	
 		$id = $f3->get('PARAMS.3');
 		$u = $this->Model->Users->fetch($id);

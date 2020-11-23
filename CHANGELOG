@@ -1,3 +1,7 @@
+0.6j
+Updated to latest version of CKEditor 4.15.1
+Added admin functionality for exporting users
+
 0.6i
 Updated to latest version of FatFree (3.6.7)
 Added PHP 7.4 compatability
