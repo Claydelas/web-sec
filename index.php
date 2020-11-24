@@ -31,6 +31,15 @@ $f3->route('GET|POST /@controller/@action/*','@controller->@action');
 $f3->route('GET|POST /api/@model','API->display');
 $f3->route('GET|POST /api/@model/@id','API->display');
 
+//Redirect all reroute() calls with external hosts as paramater to '/'
+//Prevents Open Redirect globally
+$f3->set('ONREROUTE',function($url,$permanent){
+    if(parse_url($url,PHP_URL_HOST) != null){
+        \Base::instance()->reroute('/');
+    }
+    return false;
+  });
+
 //Run!
 $f3->run();
 

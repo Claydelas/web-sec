@@ -69,7 +69,7 @@ class User extends Controller {
 				StatusMessage::add('Logged in successfully','success');
 
 				//Redirect to where they came from
-				if(isset($_GET['from'])) {
+				if(isset($_GET['from']) && $_GET['from'] != '/user/login') {
 					$f3->reroute($_GET['from']);
 				} else {
 					$f3->reroute('/');	
