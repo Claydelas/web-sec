@@ -16,12 +16,17 @@
 
 			//Log user back in from cookie
 			if($f3->exists('COOKIE.RobPress_User')) {
-				//decrypt cookie using key
-				$u = unserialize(openssl_decrypt($f3->get('COOKIE.RobPress_User'), "aes-256-cfb", $f3->get('key'), 0, $f3->get('iv')));
-				//fetch user with matching id
-				$user = $this->controller->Model->Users->fetch(['id' => $u['id']]);
-				//if such user exists, renew their session
-				if($user) $this->forceLogin($user);
+				//split cookie into selector and validator
+				list($selector, $validator) = explode(':', $f3->get('COOKIE.RobPress_User'));
+				//fetch info from last login
+				$auth = $this->controller->Model->Auth->fetch(['selector' => $selector]);
+				//if cookie identifies a user log them in
+				if($auth && hash_equals($auth->validator, hash('sha256', base64_decode($validator)))){
+					//prevents users from authenticating with expired(modified) cookie
+					if(new DateTime() > new DateTime($auth->expires)) return;
+					$user = $this->controller->Model->Users->fetch(['id' => $auth->user_id]);
+					$this->forceLogin($user);
+				}
 			}
 		}		
 
@@ -71,18 +76,31 @@
 			// session_id(password_hash($user['id'],PASSWORD_DEFAULT));
 
 			// Setup cookie for storing user details and for relogging in
-			// user id symmetrically encrypted for the cookie's data,
-			// instead of previous base64 encoding of the entire user object
+			// replaced previous base64 encoding of the entire user object
 			// +fix expiry time, +httponly cookies, +samesite Strict
 			// secure cookies (https) don't work on local machine so false for now
-			setcookie('RobPress_User', openssl_encrypt(serialize(['id' => $user['id']]), "aes-256-cfb", $f3->get('key'), 0, $f3->get('iv')), [
-				'expires' => time() + 86400,
+			$selector = base64_encode(random_bytes(9));
+			$validator = bin2hex(random_bytes(20));
+			$expires = new DateTime('+1 days');
+			
+			$cookie = $selector.':'.base64_encode($validator);
+			setcookie('RobPress_User', $cookie, [
+				'expires' => $expires->format('U'),
 				'path' => '/',
 				'domain' => "",
 				'secure' => false,
 				'httponly' => true,
 				'samesite' => 'Strict',
 			]);
+
+			$auth = $this->controller->Model->Auth->fetch(["user_id" => $user['id']]);
+			if(!$auth) $auth = $this->controller->Model->Auth;
+			$auth->selector = $selector;
+			$auth->validator = hash('sha256', $validator);
+			$auth->user_id = $user['id'];
+			$auth->expires = $expires->format('Y-m-d H:i:s');
+			$auth->save();
+
 			//And begin!
 			new Session();
 		}

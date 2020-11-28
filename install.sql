@@ -181,3 +181,16 @@ INSERT INTO `users` VALUES (1,'admin','Administrator','root@localhost','admin',2
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+--
+-- Table structure for table `auth`
+--
+
+DROP TABLE IF EXISTS `auth`;
+CREATE TABLE `auth` (
+    `id` integer(11) not null AUTO_INCREMENT,
+    `selector` char(12),
+    `validator` char(64),
+    `user_id` integer(11) not null,
+    `expires` datetime,
+    PRIMARY KEY (`id`)
+);
