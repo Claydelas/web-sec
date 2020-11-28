@@ -1,6 +1,16 @@
 # Enable rewrite engine and route requests to framework
 RewriteEngine On
 
+# Match all files that don't end with [#6] and are not [#7] and redirect to index
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{REQUEST_URI} !\.(png|jpg|jpeg|gif|css|js)$ [NC]
+RewriteCond %{REQUEST_URI} !^/(debug|initialise).php$
+RewriteRule ^((?!index\.php).+)$ %{ENV:BASE}/index.php [L]
+
+# Match all directories that are not root and respond with 403
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^((?!/).+)$ - [F]
+
 RewriteCond %{REQUEST_URI}::$1 ^(.*?/)(.*)::\2$
 RewriteRule ^(.*)$ - [E=BASE:%1]
 
