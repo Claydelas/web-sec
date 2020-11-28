@@ -169,7 +169,7 @@ CREATE TABLE `users` (
 --
 
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','Administrator','root@localhost','admin',2,'2000-01-01 00:00:00','<p>I am Administrator!</p>\r\n',''),(2,'test','Test','test@test.com','test',2,NOW(),'','');
+INSERT INTO `users` VALUES (1,'admin','Administrator','root@localhost','$2y$10$UNEL.CwEi3LpsiOh7LueQuBCPTAdC4VMSVfWWoCLo0IeFMyDLXNjK',2,'2000-01-01 00:00:00','<p>I am Administrator!</p>\r\n',''),(2,'test','Test','test@test.com','$2y$10$5yrPLHyaXO7aJY7GI.gFkOGuSdKacQPIIcqf/a3FOwPCeC5n9UbQW',2,NOW(),'','');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

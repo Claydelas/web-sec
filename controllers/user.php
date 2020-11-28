@@ -33,7 +33,7 @@ class User extends Controller {
 				}
 
 				//Set the users password
-				$user->setPassword($user->password);
+				//$user->setPassword($user->password);
 
 				$user->save();	
 				StatusMessage::add('Registration complete','success');

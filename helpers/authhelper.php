@@ -42,8 +42,8 @@
 		/** Look up user by username and password and log them in */
 		public function login($username,$password) {
 			// uses SQL mapped object instead of direct db access to fetch a single user with matching u:p
-			$user = $this->controller->Model->Users->fetch(['username' => $username, 'password' => $password]);
-			if($user){
+			$user = $this->controller->Model->Users->fetch(['username' => $username]);
+			if($user && password_verify($password,$user->password)){
 				// cast to array
 				$user = $user->cast();
 				$this->setupSession($user);
