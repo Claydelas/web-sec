@@ -4,7 +4,7 @@
 
 <hr/>
 
-<?if(isset($ERROR['trace']) && !empty($ERROR['trace'])):?>
+<?if(defined('DEBUG') && isset($ERROR['trace']) && !empty($ERROR['trace'])):?>
 <h4>Stack Trace</h4>
 
 <div class="well">
