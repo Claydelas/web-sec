@@ -4,7 +4,7 @@ class Blog extends Controller {
 	public function index($f3) {	
 		if ($f3->exists('PARAMS.3')) {
 			$categoryid = $f3->get('PARAMS.3');
-			$category = $this->Model->Categories->fetch($categoryid);
+			$category = $this->Model->Categories->fetchById($categoryid);
 			$postlist = array_values($this->Model->Post_Categories->fetchList(array('id','post_id'),array('category_id' => $categoryid)));
 			$posts = $this->Model->Posts->fetchAll(array('id' => $postlist, 'published' => 'IS NOT NULL'),array('order' => 'published DESC'));
 			$f3->set('category',$category);
@@ -22,7 +22,7 @@ class Blog extends Controller {
 		if(empty($id)) {
 			return $f3->reroute('/');
 		}
-		$post = $this->Model->Posts->fetch($id);
+		$post = $this->Model->Posts->fetchById($id);
 		if(empty($post)) {
 			return $f3->reroute('/');
 		}
@@ -52,7 +52,7 @@ class Blog extends Controller {
 
 	public function comment($f3) {
 		$id = $f3->get('PARAMS.3');
-		$post = $this->Model->Posts->fetch($id);
+		$post = $this->Model->Posts->fetchById($id);
 		if($this->request->is('post')) {
 			$comment = $this->Model->Comments;
 			$comment->copyfrom('POST');
@@ -86,7 +86,7 @@ class Blog extends Controller {
 	public function moderate($f3) {
 		list($id,$option) = explode("/",$f3->get('PARAMS.3'));
 		$comments = $this->Model->Comments;
-		$comment = $comments->fetch($id);
+		$comment = $comments->fetchById($id);
 
 		$post_id = $comment->blog_id;
 		//Approve

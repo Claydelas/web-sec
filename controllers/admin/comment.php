@@ -21,7 +21,7 @@ class Comment extends AdminController {
 
 	public function edit($f3) {
 		$id = $f3->get('PARAMS.3');
-		$comment = $this->Model->Comments->fetch($id);
+		$comment = $this->Model->Comments->fetchById($id);
 		if($this->request->is('post')) {
 			$comment->copyfrom('POST');
 			$comment->save();

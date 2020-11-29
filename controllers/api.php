@@ -13,8 +13,7 @@ class Api extends Controller {
 		// variable token is set and is non-empty
 		if($token == NULL || $token != $f3->get('apikey')) {
 			// Deny access when DEBUG mode is off (and token matches apikey)
-			if($this->db->connection->
-			exec("SELECT `value` from `settings` where `setting`='debug'")[0]['value'] == "0"){
+			if($this->Model->Settings->fetch(['setting' => 'debug'])->value == 0){
 				echo json_encode(array('error' => '403'));
 				die();
 			}
@@ -28,7 +27,7 @@ class Api extends Controller {
 				$results[] = $r->cast();
 			}
 		} else {
-			$result = $this->Model->$model->fetch($id);
+			$result = $this->Model->$model->fetchById($id);
 			$results = $result->cast();
 		}
 

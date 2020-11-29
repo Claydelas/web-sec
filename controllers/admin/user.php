@@ -28,7 +28,7 @@ class User extends AdminController {
 
 	public function edit($f3) {	
 		$id = $f3->get('PARAMS.3');
-		$u = $this->Model->Users->fetch($id);
+		$u = $this->Model->Users->fetchById($id);
 		if($this->request->is('post')) {
 			$oldpass = $u->password;
 			$u->copyfrom('POST');
@@ -44,7 +44,7 @@ class User extends AdminController {
 
 	public function delete($f3) {
 		$id = $f3->get('PARAMS.3');
-		$u = $this->Model->Users->fetch($id);
+		$u = $this->Model->Users->fetchById($id);
 
 		if($id == $this->Auth->user('id')) {
 			\StatusMessage::add('You cannot remove yourself','danger');

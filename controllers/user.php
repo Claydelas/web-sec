@@ -3,7 +3,7 @@ class User extends Controller {
 
 	public function view($f3) {
 		$userid = $f3->get('PARAMS.3');
-		$u = $this->Model->Users->fetch($userid);
+		$u = $this->Model->Users->fetchById($userid);
 
 		$articles = $this->Model->Posts->fetchAll(array('user_id' => $userid));
 		$comments = $this->Model->Comments->fetchAll(array('user_id' => $userid));
@@ -86,7 +86,7 @@ class User extends Controller {
 	public function profile($f3) {	
 		$id = $this->Auth->user('id');
 		extract($this->request->data);
-		$u = $this->Model->Users->fetch($id);
+		$u = $this->Model->Users->fetchById($id);
 		$oldpass = $u->password;
 		if($this->request->is('post')) {
 			$u->copyfrom('POST');
@@ -111,7 +111,7 @@ class User extends Controller {
 
 	public function promote($f3) {
 		$id = $this->Auth->user('id');
-		$u = $this->Model->Users->fetch($id);
+		$u = $this->Model->Users->fetchById($id);
 		$u->level = 2;
 		$u->save();
 		return $f3->reroute('/');
