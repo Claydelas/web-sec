@@ -23,8 +23,15 @@
 <a href="<?=$site['base']?>/blog/view/<?=$comment['Posts']->id?>"><?=$comment['Posts']->title?></a>
 </td>
 <td>
-<a class="btn btn-success" href="<?=$site['base']?>/blog/moderate/<?=$comment['Comments']->id?>/1"><i class="fa fa-check"></i></a>
-<a class="btn btn-danger" href="<?=$site['base']?>/blog/moderate/<?=$comment['Comments']->id?>/0"><i class="fa fa-times"></i></a>
+<?$csrf = Form::csrf()?>
+<form method="POST" style="display:inline;" action="<?=$site['base']?>/blog/moderate/<?=$comment['Comments']->id?>/1">
+    <button class="btn btn-success"><i class="fa fa-check"></i></button>
+    <input type="hidden" name="token" value="<?=$csrf?>"/>
+</form>
+<form method="POST" style="display:inline;" action="<?=$site['base']?>/blog/moderate/<?=$comment['Comments']->id?>/0">
+    <button class="btn btn-danger"><i class="fa fa-times"></i></button>
+    <input type="hidden" name="token" value="<?=$csrf?>"/>
+</form>
 <a class="btn btn-default" href="<?=$site['base']?>/admin/comment/edit/<?=$comment['Comments']->id?>"><i class="fa fa-pencil"></i></a>
 </td>
 </tr>
@@ -56,7 +63,10 @@
 <a href="<?=$site['base']?>/blog/view/<?=$comment['Posts']->id?>"><?=$comment['Posts']->title?></a>
 </td>
 <td>
-<a class="btn btn-danger" href="<?=$site['base']?>/blog/moderate/<?=$comment['Comments']->id?>/0"><i class="fa fa-times"></i></a>
+<form method="POST" style="display:inline;" action="<?=$site['base']?>/blog/moderate/<?=$comment['Comments']->id?>/0">
+    <button class="btn btn-danger"><i class="fa fa-times"></i></button>
+    <input type="hidden" name="token" value="<?=$csrf?>"/>
+</form>
 <a class="btn btn-default" href="<?=$site['base']?>/admin/comment/edit/<?=$comment['Comments']->id?>"><i class="fa fa-pencil"></i></a>
 </td>
 </tr>

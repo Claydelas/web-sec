@@ -2,14 +2,20 @@
 
 class Form {
 
-	public function __construct() {
-	}
-
-	public function start($options=array()) {
+	public static function csrf(){
 		// generate random 32-byte token
 		$token = bin2hex(random_bytes(32));
 		// store it in session so it's accessible from controllers
 		BASE::instance()->set('SESSION.token',$token);
+		return $token;
+	}
+
+	public function __construct() {
+	}
+
+	public function start($options=array(), $token = null) {
+		// if token is not passed as param, generate a new one
+		if($token == null) $token = $this->csrf();
 		$action = isset($options['action']) ? $options['action'] : '';
 		$enctype = (isset($options['type']) && $options['type'] == 'file') ? 'enctype="multipart/form-data"' : ''; //Handle file uploads
 		// add a hidden field that contains the csrf token for each form

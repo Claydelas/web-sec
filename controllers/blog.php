@@ -38,6 +38,8 @@ class Blog extends Controller {
 	}
 
 	public function reset($f3) {
+		// require admin access
+		if($this->Auth->user('level') < $this->level) {return $f3->reroute('/');}
 		$allposts = $this->Model->Posts->fetchAll();
 		$allcategories = $this->Model->Categories->fetchAll();
 		$allcomments = $this->Model->Comments->fetchAll();
@@ -84,21 +86,25 @@ class Blog extends Controller {
 	}
 
 	public function moderate($f3) {
-		list($id,$option) = explode("/",$f3->get('PARAMS.3'));
-		$comments = $this->Model->Comments;
-		$comment = $comments->fetchById($id);
-
-		$post_id = $comment->blog_id;
-		//Approve
-		if ($option == 1) {
-			$comment->moderated = 1;
-			$comment->save();
-		} else {
-		//Deny
-			$comment->erase();
+		//require admin access
+		if($this->Auth->user('level') < $this->level) return $f3->reroute('/');
+		if($this->request->is('post')) {
+			list($id,$option) = explode("/",$f3->get('PARAMS.3'));
+			$comments = $this->Model->Comments;
+			$comment = $comments->fetchById($id);
+			
+			$post_id = $comment->blog_id;
+			//Approve
+			if ($option == 1) {
+				$comment->moderated = 1;
+				$comment->save();
+			} else {
+			//Deny
+				$comment->erase();
+			}
+			StatusMessage::add('The comment has been moderated');
+			$f3->reroute('/blog/view/' . $comment->blog_id);
 		}
-		StatusMessage::add('The comment has been moderated');
-		$f3->reroute('/blog/view/' . $comment->blog_id);
 	}
 
 	public function search($f3) {

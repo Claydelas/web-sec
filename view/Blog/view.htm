@@ -55,12 +55,19 @@ if(!empty($blog['Users'])) {
 <? if($comment['Comments']->moderated == 0): ?>
 <p><em>Awaiting moderation</em></p>
 <? endif; ?>
+<?$csrf = Form::csrf()?>
 <?if($user['level'] > 1):?>
-<a href="<?=$site['base']?>/blog/moderate/<?=$comment['Comments']->id?>/0" class="btn btn-danger">Delete</a>
+<form method="POST" style="display:inline;" action="<?=$site['base']?>/blog/moderate/<?=$comment['Comments']->id?>/0">
+    <button class="btn btn-danger">Delete</button>
+    <input type="hidden" name="token" value="<?=$csrf?>"/>
+</form>
 <a href="<?=$site['base']?>/admin/comment/edit/<?=$comment['Comments']->id?>" class="btn btn-default">Edit</a>
 <?endif;?>
 <?if($can_moderate == 1):?>
-<a href="<?=$site['base']?>/blog/moderate/<?=$comment['Comments']->id?>/1" class="btn btn-success">Approve Comment</a>
+<form method="POST" style="display:inline;" action="<?=$site['base']?>/blog/moderate/<?=$comment['Comments']->id?>/1">
+    <button class="btn btn-success">Approve Comment</button>
+    <input type="hidden" name="token" value="<?=$csrf?>"/>
+</form>
 <?endif;?>
 <div class="clearfix"> </div>
 </div>
@@ -73,7 +80,7 @@ if(!empty($blog['Users'])) {
 <p>You must be <a href="<?=$site['base']?>/user/add">registered</a> and <a href="<?=$site['base']?>/user/login">logged in</a> in order to leave a comment</p>
 <? else: ?>
 <? $form = new Form(); 
-echo $form->start(array('action' => $site['base'] . '/blog/comment/' . $post->id));
+echo $form->start(array('action' => $site['base'] . '/blog/comment/' . $post->id), $csrf);
 echo $form->add('user_id',array('type' => 'hidden', 'value' => $user['id']));
 echo $form->add('subject',array('type' => 'text', 'placeholder' => 'Enter Subject'));
 echo $form->add('message',array('type' => 'wysiwyg','label' => 'Your message'));
