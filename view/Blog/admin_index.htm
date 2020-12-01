@@ -11,6 +11,7 @@
 <th>Published</th>
 </thead>
 <tbody>
+<?$csrf = Form::csrf()?>
 <? foreach($blogs as $blog): ?>
 <? $post = $blog['Posts']; ?>
 <? 
@@ -26,7 +27,10 @@ if(!empty($blog['Users'])) {
 
 <tr>
 <td style="font-weight: bold">
-<a style="float: right" href="<?=$site['base']?>/admin/blog/delete/<?=$post['id']?>">&times;</a>
+<form method="POST" style="display:inline;" action="<?=$site['base']?>/admin/blog/delete/<?=$post['id']?>">
+	<button style="color: #428bca; background:none ;border: none; padding:0; float: right">&times;</button>
+    <input type="hidden" name="token" value="<?=$csrf?>"/>
+</form>
 <a href="<?=$site['base']?>/admin/blog/edit/<?=$post['id']?>"><?=$post['title']?></a>
 </td>
 <td><?=$author->username?></td>
