@@ -105,7 +105,7 @@ class Blog extends Controller {
 			StatusMessage::add('The comment has been moderated');
 			$f3->reroute('/blog/view/' . $comment->blog_id);
 		}
-		$f3->reroute('/');
+		$f3->reroute('/blog');
 	}
 
 	public function search($f3) {

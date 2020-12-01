@@ -3,10 +3,10 @@
 <div class="row-fluid">
 <div class="col-md-4">
 <h4>Add New Category</h4>
-
+<?$csrf = Form::csrf()?>
 <?php
 	$form = new Form(); 
-	echo $form->start(array('action' => $site['base'].'/admin/category/add'));
+	echo $form->start(array('action' => $site['base'].'/admin/category/add'), $csrf);
 	echo $form->add('title',array('placeholder' => 'Enter Title'));
 	echo $form->add('Add',array('type' => 'submit'));
 	echo $form->end();
@@ -25,7 +25,10 @@
 <? foreach($categories as $category): ?>
 <tr>
 <td style="font-weight: bold">
-<a style="float: right" href="<?=$site['base']?>/admin/category/delete/<?=$category['id']?>">&times;</a>
+<form method="POST" style="display:inline;" action="<?=$site['base']?>/admin/category/delete/<?=$category['id']?>">
+	<button style="color: #428bca; background:none ;border: none; padding:0; float: right">&times;</button>
+    <input type="hidden" name="token" value="<?=$csrf?>"/>
+</form>
 <a href="<?=$site['base']?>/admin/category/edit/<?=$category['id']?>"><?=$category['title']?></a>
 </td>
 <td><?= $counts[$category['id']] ?></td>

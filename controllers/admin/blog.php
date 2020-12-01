@@ -26,7 +26,7 @@
 				\StatusMessage::add('Post deleted successfully','success');
 				return $f3->reroute('/admin/blog');
 			}
-			$f3->reroute('/');
+			$f3->reroute('/admin/blog');
 		}
 
 		public function add($f3) {
