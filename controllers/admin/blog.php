@@ -12,18 +12,21 @@
 		}
 
 		public function delete($f3) {
-			$postid = $f3->get('PARAMS.3');
-			$post = $this->Model->Posts->fetchById($postid);
-			$post->erase();
+			if($this->request->is('post')) {
+				$postid = $f3->get('PARAMS.3');
+				$post = $this->Model->Posts->fetchById($postid);
+				$post->erase();
 
-			//Remove from categories
-			$cats = $this->Model->Post_Categories->fetchAll(array('post_id' => $postid));
-			foreach($cats as $cat) {
-				$cat->erase();
-			}	
-
-			\StatusMessage::add('Post deleted successfully','success');
-			return $f3->reroute('/admin/blog');
+				//Remove from categories
+				$cats = $this->Model->Post_Categories->fetchAll(array('post_id' => $postid));
+				foreach($cats as $cat) {
+					$cat->erase();
+				}	
+				
+				\StatusMessage::add('Post deleted successfully','success');
+				return $f3->reroute('/admin/blog');
+			}
+			$f3->reroute('/');
 		}
 
 		public function add($f3) {
