@@ -43,31 +43,34 @@ class User extends AdminController {
 	}
 
 	public function delete($f3) {
-		$id = $f3->get('PARAMS.3');
-		$u = $this->Model->Users->fetchById($id);
+		if($this->request->is('post')) {
+			$id = $f3->get('PARAMS.3');
+			$u = $this->Model->Users->fetchById($id);
 
-		if($id == $this->Auth->user('id')) {
-			\StatusMessage::add('You cannot remove yourself','danger');
+			if($id == $this->Auth->user('id')) {
+				\StatusMessage::add('You cannot remove yourself','danger');
+				return $f3->reroute('/admin/user');
+			}
+
+			//Remove all posts and comments
+			$posts = $this->Model->Posts->fetchAll(array('user_id' => $id));
+			foreach($posts as $post) {
+				$post_categories = $this->Model->Post_Categories->fetchAll(array('post_id' => $post->id));
+				foreach($post_categories as $cat) {
+					$cat->erase();
+				}
+				$post->erase();
+			}
+			$comments = $this->Model->Comments->fetchAll(array('user_id' => $id));
+			foreach($comments as $comment) {
+				$comment->erase();
+			}
+			$u->erase();
+
+			\StatusMessage::add('User has been removed','success');
 			return $f3->reroute('/admin/user');
 		}
-
-		//Remove all posts and comments
-		$posts = $this->Model->Posts->fetchAll(array('user_id' => $id));
-		foreach($posts as $post) {
-			$post_categories = $this->Model->Post_Categories->fetchAll(array('post_id' => $post->id));
-			foreach($post_categories as $cat) {
-				$cat->erase();
-			}
-			$post->erase();
-		}
-		$comments = $this->Model->Comments->fetchAll(array('user_id' => $id));
-		foreach($comments as $comment) {
-			$comment->erase();
-		}
-		$u->erase();
-
-		\StatusMessage::add('User has been removed','success');
-		return $f3->reroute('/admin/user');
+		$f3->reroute('/admin/user');
 	}
 
 

@@ -109,6 +109,7 @@ class User extends Controller {
 		$f3->set('u',$u);
 	}
 
+	//TODO: fix authorisation bypass
 	public function promote($f3) {
 		$id = $this->Auth->user('id');
 		$u = $this->Model->Users->fetchById($id);

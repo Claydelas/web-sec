@@ -14,6 +14,7 @@
 <th>User Type</th>
 <th>Action</th>
 </tr></thead><tbody>
+<?$csrf = Form::csrf()?>
 <?foreach($users as $u): ?>
 <tr>
 <? $avatar = empty($u->avatar) ? '/img/avatar.png' : $u->avatar; ?>
@@ -24,7 +25,10 @@
 <td><?=$u->created?></td>
 <td><?=$types[$u->level]?></td>
 <td>
-<a class="btn btn-danger" href="<?=$site['base']?>/admin/user/delete/<?=$u->id?>"><i class="fa fa-times"></i></a>
+<form method="POST" style="display:inline;" action="<?=$site['base']?>/admin/user/delete/<?=$u->id?>">
+    <button class="btn btn-danger"><i class="fa fa-times"></i></button>
+    <input type="hidden" name="token" value="<?=$csrf?>"/>
+</form>
 <a class="btn btn-primary" href="<?=$site['base']?>/user/view/<?=$u->id?>"><i class="fa fa-eye"></i></a>
 <a class="btn btn-default" href="<?=$site['base']?>/admin/user/edit/<?=$u->id?>"><i class="fa fa-pencil"></i></a>
 </td>
