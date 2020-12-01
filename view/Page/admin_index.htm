@@ -5,10 +5,10 @@
 <div class="row-fluid">
 <div class="col-md-4">
 <h4>Add New Page</h4>
-
+<?$csrf = Form::csrf()?>
 <?php
 	$form = new Form(); 
-	echo $form->start(array('action' => $site['base'].'/admin/page/add'));
+	echo $form->start(array('action' => $site['base'].'/admin/page/add'), $csrf);
 	echo $form->add('title',array('placeholder' => 'Enter Title'));
 	echo $form->add('Add Page',array('type' => 'submit'));
 	echo $form->end();
@@ -27,7 +27,10 @@
 <tr>
 <td style="font-weight: bold">
 <? $pagename = str_ireplace(".html","",$page); ?>
-<a href="<?=$site['base']?>/admin/page/delete/<?=$pagename?>" style="float: right">&times;</a>
+<form method="POST" style="display:inline;" action="<?=$site['base']?>/admin/page/delete/<?=$pagename?>">
+	<button style="color: #428bca; background:none ;border: none; padding:0; float: right">&times;</button>
+    <input type="hidden" name="token" value="<?=$csrf?>"/>
+</form>
 <a href="<?=$site['base']?>/admin/page/edit/<?=$pagename?>"><?=$pagetitle?></a>
 </td>
 </tr>
