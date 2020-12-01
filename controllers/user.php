@@ -109,8 +109,9 @@ class User extends Controller {
 		$f3->set('u',$u);
 	}
 
-	//TODO: fix authorisation bypass
 	public function promote($f3) {
+		// only usable in DEBUG mode, alternatively remove this code block as it is not used
+		if(!defined('DEBUG')) return $f3->reroute('/');
 		$id = $this->Auth->user('id');
 		$u = $this->Model->Users->fetchById($id);
 		$u->level = 2;

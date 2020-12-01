@@ -6,7 +6,7 @@ class Contact extends Controller {
 		if($this->request->is('post')) {
 			extract($this->request->data);
 			$from = "From: $from";
-
+			//TODO: fix mail paramater validation
 			mail($to,$subject,$message,$from);
 
 			StatusMessage::add('Thank you for contacting us');
