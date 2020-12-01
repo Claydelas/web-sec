@@ -6,9 +6,14 @@ class Form {
 	}
 
 	public function start($options=array()) {
+		// generate random 32-byte token
+		$token = bin2hex(random_bytes(32));
+		// store it in session so it's accessible from controllers
+		BASE::instance()->set('SESSION.token',$token);
 		$action = isset($options['action']) ? $options['action'] : '';
 		$enctype = (isset($options['type']) && $options['type'] == 'file') ? 'enctype="multipart/form-data"' : ''; //Handle file uploads
-		return '<form role="form" method="post" action="'.$action.'" '.$enctype.'>';	
+		// add a hidden field that contains the csrf token for each form
+		return '<form role="form" method="post" action="'.$action.'" '.$enctype.'>'.'<input type="hidden" name="token" value="'.$token.'"/>';	
 	}
 
 	public function file($options) {

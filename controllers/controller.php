@@ -23,6 +23,18 @@ class Controller {
 
 	public function beforeRoute($f3) {
 		$this->request = new Request();
+		// if not in debug mode and the request is post
+		if (!defined('DEBUG') && $f3->VERB=='POST') {
+			// retrieve form token
+			$token = $f3->get('POST.token');
+			// retrieve expected token
+			$csrf = $f3->get('SESSION.token');
+			// perform token validation and reroute to index if token mismatch
+			if (empty($token) || empty($csrf) || $token!==$csrf) {
+				StatusMessage::add('CSRF attack detected.','danger');
+				$f3->reroute('/');
+			}
+		}
 
 		//Check user
 		$this->Auth->resume();
