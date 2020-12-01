@@ -38,8 +38,8 @@ class Blog extends Controller {
 	}
 
 	public function reset($f3) {
-		// require admin access
-		if($this->Auth->user('level') < $this->level) {return $f3->reroute('/');}
+		// require debug and admin access
+		if(!defined('DEBUG') || $this->Auth->user('level') < $this->level) {return $f3->reroute('/');}
 		$allposts = $this->Model->Posts->fetchAll();
 		$allcategories = $this->Model->Categories->fetchAll();
 		$allcomments = $this->Model->Comments->fetchAll();
@@ -92,7 +92,7 @@ class Blog extends Controller {
 			list($id,$option) = explode("/",$f3->get('PARAMS.3'));
 			$comments = $this->Model->Comments;
 			$comment = $comments->fetchById($id);
-			
+
 			$post_id = $comment->blog_id;
 			//Approve
 			if ($option == 1) {
@@ -105,6 +105,7 @@ class Blog extends Controller {
 			StatusMessage::add('The comment has been moderated');
 			$f3->reroute('/blog/view/' . $comment->blog_id);
 		}
+		$f3->reroute('/');
 	}
 
 	public function search($f3) {
