@@ -27,7 +27,8 @@
           <ul class="dropdown-menu" role="menu">
             <li><a href="<?= $site['base'] ?>/user/profile">Edit Profile</a></li>
             <li class="divider"></li>
-            <li><a href="<?= $site['base'] ?>/user/logout">Logout</a></li>
+            <?$_SESSION['logout_token'] = Form::token();?>
+            <li><a href="<?= $site['base'] ?>/user/logout?token=<?=$_SESSION['logout_token']?>">Logout</a></li>
           </ul>
         </li>
 	<? else: ?>

@@ -54,8 +54,16 @@
 
 		/** Log user out of system */
 		public function logout() {
-			$f3=Base::instance();							
-
+			$f3=Base::instance();
+			//Stop logout process on CSRF attempt
+			//Logout uses GET request despite it changing state, because site locations with
+			//other existing POST forms will override the token for logout
+			//Furthermore, there wasn't a good way to implement a form in the navbar menu
+			//while maintaining the current look and feel
+			if($f3->get('SESSION.logout_token') != $f3->get('GET.token')){
+				StatusMessage::add('CSRF attack detected.','danger');
+				return $f3->reroute('/');
+			}
 			//Kill the session
 			session_destroy();
 

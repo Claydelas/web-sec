@@ -4,10 +4,14 @@ class Form {
 
 	public static function csrf(){
 		// generate random 32-byte token
-		$token = bin2hex(random_bytes(32));
+		$token = self::token();
 		// store it in session so it's accessible from controllers
 		BASE::instance()->set('SESSION.token',$token);
 		return $token;
+	}
+
+	public static function token(){
+		return bin2hex(random_bytes(32));
 	}
 
 	public function __construct() {
