@@ -57,9 +57,12 @@ class Blog extends Controller {
 		$post = $this->Model->Posts->fetchById($id);
 		if($this->request->is('post')) {
 			$comment = $this->Model->Comments;
-			$comment->copyfrom('POST');
+			//copyfrom could allow override of id column
+			//$comment->copyfrom('POST');
+			$comment->user_id = $this->Auth->user('id');
 			$comment->blog_id = $id;
 			$comment->created = mydate();
+			$comment->message = HTMLPurifier::instance()->purify($f3->get('POST.message'));
 
 			//Moderation of comments
 			if (!empty($this->Settings['moderate']) && $this->Auth->user('level') < 2) {
@@ -71,6 +74,8 @@ class Blog extends Controller {
 			//Default subject
 			if(empty($this->request->data['subject'])) {
 				$comment->subject = 'RE: ' . $post->title;
+			} else {
+				$comment->subject = $this->request->data['subject'];
 			}
 
 			$comment->save();
