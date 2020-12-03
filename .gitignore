@@ -30,3 +30,6 @@ tags
 
 # vscode project config
 .vscode
+
+# htmlpurifier cache
+vendor/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer
