@@ -96,7 +96,12 @@ class User extends Controller {
 			//Handle avatar upload
 			if(isset($_FILES['avatar']) && isset($_FILES['avatar']['tmp_name']) && !empty($_FILES['avatar']['tmp_name'])) {
 				$url = File::Upload($_FILES['avatar']);
-				$u->avatar = $url;
+				if(!$url) {
+					\StatusMessage::add('Upload failed, profile not updated.','danger');
+					return $f3->reroute('/user/profile');
+				} else {
+					$u->avatar = $url;
+				}
 			} else if(isset($reset)) {
 				$u->avatar = '';
 			}
