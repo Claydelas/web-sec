@@ -1,3 +1,4 @@
+<?$csrf = Form::csrf()?>
 <p style="float: right; margin-top: 10px;"><a class="btn btn-default" href="<?=$site['base']?>/admin/blog/add"><i class="fa fa-plus"></i> Add Post</a></p>
 <h2>All Posts</h2>
 
@@ -11,7 +12,6 @@
 <th>Published</th>
 </thead>
 <tbody>
-<?$csrf = Form::csrf()?>
 <? foreach($blogs as $blog): ?>
 <? $post = $blog['Posts']; ?>
 <? 

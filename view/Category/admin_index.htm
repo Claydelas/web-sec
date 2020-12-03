@@ -1,9 +1,9 @@
+<?$csrf = Form::csrf()?>
 <h2>Categories</h2>
 
 <div class="row-fluid">
 <div class="col-md-4">
 <h4>Add New Category</h4>
-<?$csrf = Form::csrf()?>
 <?php
 	$form = new Form(); 
 	echo $form->start(array('action' => $site['base'].'/admin/category/add'), $csrf);

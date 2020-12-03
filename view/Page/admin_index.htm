@@ -1,3 +1,4 @@
+<?$csrf = Form::csrf()?>
 <h2>Static Pages</h2>
 <p>Static pages enable you to have non-blog related content on your website. These pages appear automatically in your navigation bar.</p>
 <hr/>
@@ -5,7 +6,6 @@
 <div class="row-fluid">
 <div class="col-md-4">
 <h4>Add New Page</h4>
-<?$csrf = Form::csrf()?>
 <?php
 	$form = new Form(); 
 	echo $form->start(array('action' => $site['base'].'/admin/page/add'), $csrf);

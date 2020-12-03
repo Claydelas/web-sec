@@ -1,3 +1,4 @@
+<?$csrf = Form::csrf()?>
 <h2>All Comments</h2>
 <h3>Awaiting Moderation</h3>
 
@@ -23,7 +24,6 @@
 <a href="<?=$site['base']?>/blog/view/<?=$comment['Posts']->id?>"><?=$comment['Posts']->title?></a>
 </td>
 <td>
-<?$csrf = Form::csrf()?>
 <form method="POST" style="display:inline;" action="<?=$site['base']?>/blog/moderate/<?=$comment['Comments']->id?>/1">
     <button class="btn btn-success"><i class="fa fa-check"></i></button>
     <input type="hidden" name="token" value="<?=$csrf?>"/>
