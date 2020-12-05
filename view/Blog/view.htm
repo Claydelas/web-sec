@@ -23,7 +23,7 @@ if(!empty($blog['Users'])) {
 </em></p>
 <? endif; ?>
 
-<?=$post->content?>
+<?=$this->raw($post->content)?>
 
 <?if(!empty($site['comments'])):?>
 <hr/>
@@ -52,7 +52,7 @@ if(!empty($blog['Users'])) {
 <a href="<?=$site['base']?>/user/view/<?=$comment['Users']->id?>"><?=$comment['Users']->displayname?></a>
 <br/><img src="<?=$site['base']?><?=$avatar?>" class="avatar"/></span></h4>
 <h6><?=nicedate($comment['Comments']->created)?></h6>
-<?=$comment['Comments']->message?>
+<?=$this->raw($comment['Comments']->message)?>
 <? if($comment['Comments']->moderated == 0): ?>
 <p><em>Awaiting moderation</em></p>
 <? endif; ?>

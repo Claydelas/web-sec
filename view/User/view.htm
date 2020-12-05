@@ -4,7 +4,7 @@
 <h2><?=$u->displayname?> (<?=$u->username?>)</h2>
 
 <h4>Biography</h4>
-<?=$u->bio?>
+<?=$this->raw($u->bio)?>
 
 <hr/>
 
