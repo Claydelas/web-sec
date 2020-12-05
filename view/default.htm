@@ -2,7 +2,7 @@
 <? include("robpress.htm"); ?>
 <div class="container" role="main">
 	<? foreach(StatusMessage::get() as $message): ?>
-		<div class="alert alert-<?=$message['type']?>"><?=$message['message']?></div>
+		<div class="alert alert-<?=$message['type']?>"><?=$this->esc($message['message'])?></div>
 	<? endforeach; ?>
 	<?= $content ?>
 
