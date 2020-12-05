@@ -60,7 +60,8 @@
 			//other existing POST forms will override the token for logout
 			//Furthermore, there wasn't a good way to implement a form in the navbar menu
 			//while maintaining the current look and feel
-			if($f3->get('SESSION.logout_token') != $f3->get('GET.token')){
+			//TODO: change to post request
+			if(!defined('DEBUG') && ($f3->get('SESSION.logout_token') != $f3->get('GET.token'))){
 				StatusMessage::add('CSRF attack detected.','danger');
 				return $f3->reroute('/');
 			}
