@@ -120,6 +120,20 @@ class Controller {
 			Settings::process($afterCode);
 		}
 
+		/* Because f3 ESCAPE is true to begin with (from global config), everything  is
+		escaped properly while rendering $template and stored in $content.
+		However, when layout is rendered, $content is escaped automatically, as it is
+		included in the body of every layout. This means that instead of a view with
+		individually escaped fields, we end up with a layout with a string as its content.
+		Normally, one would use raw() on fields where escaping is unneeded, but it doesn't
+		work as expected, because it returns the whole input unescaped, which if used on
+		$content, would cancel out any previouslly done escaping inside $content.
+
+		To avoid this, a suitable approach is to temporary disable auto-escaping
+		to avoid the entire $content being escaped in the first place.
+		The result is when rendering layout, $content is escaped appropriately.*/
+		$f3->set('ESCAPE', false);
+
 		//Render template
 		echo View::instance()->render($this->layout . '.htm');
 	}
