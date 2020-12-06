@@ -15,32 +15,41 @@ class User extends Controller {
 
 	public function add($f3) {
 		if($this->request->is('post')) {
-			extract($this->request->data);
-			$check = $this->Model->Users->fetch(array('username' => $username));
+			$data = $this->request->data;
+			$check = $this->Model->Users->fetch(['username' => $data['username']]);
 			if (!empty($check)) {
 				StatusMessage::add('User already exists','danger');
-			} else if($password != $password2) {
-				StatusMessage::add('Passwords must match','danger');
-			} else {
-				$user = $this->Model->Users;
-				$user->copyfrom('POST');
-				$user->created = mydate();
-				$user->bio = '';
-				$user->level = 1;
-				$user->setPassword($password);
-				if(empty($displayname)) {
-					$user->displayname = $user->username;
-				}
-
-				//Set the users password
-				//$user->setPassword($user->password);
-
-				$user->save();	
-				StatusMessage::add('Registration complete','success');
-				return $f3->reroute('/user/login');
+				return;
 			}
+			if($this->Model->Users->fetch(['displayname' => $data['displayname']])){
+				StatusMessage::add('Display name already exists','danger');
+				return;
+			}
+			if($data['password'] != $data['password2']) {
+				StatusMessage::add('Passwords must match','danger');
+				return;
+			}
+			
+			$user = $this->Model->Users;
+			$user->username = $data['username'];
+			if(empty($data['displayname']) && !$this->Model->Users->fetch(['displayname' => $data['username']])) {
+				$user->displayname = $data['username'];
+			} else {
+				$user->displayname = $data['displayname'];
+			}
+			$user->email = $data['email'];
+			$user->setPassword($data['password']);
+			$user->level = 1;
+			$user->created = mydate();
+			$user->bio = '';
+			$user->avatar = '';
+
+			$user->save();	
+			StatusMessage::add('Registration complete','success');
+			return $f3->reroute('/user/login');
 		}
 	}
+	
 
 	public function login($f3) {
 		/** YOU MAY NOT CHANGE THIS FUNCTION - Make any changes in Auth->checkLogin, Auth->login and afterLogin() (AuthHelper.php) */
