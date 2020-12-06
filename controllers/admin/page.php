@@ -21,6 +21,9 @@ class Page extends AdminController {
 
 	public function edit($f3) {
 		$pagename = $f3->get('PARAMS.3');
+		// return early if page doesn't exist
+		if(!array_key_exists(strtolower($pagename), array_change_key_case($this->Model->Pages->fetchAll())))
+			return $f3->reroute('/admin/page');
 		if ($this->request->is('post')) {
 			$pages = $this->Model->Pages;
 			$pages->title = $pagename;
