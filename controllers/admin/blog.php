@@ -61,7 +61,7 @@
 					$link->reset();
 					$link->category_id = $category;
 					$link->post_id = $postid;
-					$link->save();
+					if($link->validate()) $link->save();
 				}
 				\StatusMessage::add('Post added successfully','success');
 				return $f3->reroute('/admin/blog');
@@ -110,7 +110,7 @@
 					$link->reset();
 					$link->category_id = $category;
 					$link->post_id = $postid;
-					$link->save();
+					if($link->validate()) $link->save();
 				}
 
 				\StatusMessage::add('Post updated successfully','success');
