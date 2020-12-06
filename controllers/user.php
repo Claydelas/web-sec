@@ -6,8 +6,8 @@ class User extends Controller {
 		$u = $this->Model->Users->fetchById($userid);
 		if(!$u) return $f3->reroute('/');
 
-		$articles = $this->Model->Posts->fetchAll(array('user_id' => $userid));
-		$comments = $this->Model->Comments->fetchAll(array('user_id' => $userid));
+		$articles = $this->Model->Posts->fetchAll(array('user_id' => $userid, 'published' => 'IS NOT NULL'));
+		$comments = $this->Model->Comments->fetchAll(array('user_id' => $userid, 'moderated' => 1));
 
 		$f3->set('u',$u);
 		$f3->set('articles',$articles);
