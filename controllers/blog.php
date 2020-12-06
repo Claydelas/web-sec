@@ -22,7 +22,11 @@ class Blog extends Controller {
 		if(empty($id)) {
 			return $f3->reroute('/');
 		}
-		$post = $this->Model->Posts->fetchById($id);
+		if($this->Auth->user('level') < 2){
+			$post = $this->Model->Posts->fetchById($id, ['published' => 'IS NOT NULL']);
+		} else {
+			$post = $this->Model->Posts->fetchById($id);
+		}
 		if(empty($post)) {
 			return $f3->reroute('/');
 		}
@@ -39,7 +43,7 @@ class Blog extends Controller {
 
 	public function reset($f3) {
 		// require debug and admin access
-		if(!defined('DEBUG') || $this->Auth->user('level') < $this->level) {return $f3->reroute('/');}
+		if(!defined('DEBUG') || $this->Auth->user('level') < 2) {return $f3->reroute('/');}
 		$allposts = $this->Model->Posts->fetchAll();
 		$allcategories = $this->Model->Categories->fetchAll();
 		$allcomments = $this->Model->Comments->fetchAll();
@@ -94,7 +98,7 @@ class Blog extends Controller {
 
 	public function moderate($f3) {
 		//require admin access
-		if($this->Auth->user('level') < $this->level) return $f3->reroute('/');
+		if($this->Auth->user('level') < 2) return $f3->reroute('/');
 		if($this->request->is('post')) {
 			list($id,$option) = explode("/",$f3->get('PARAMS.3'));
 			$comments = $this->Model->Comments;
@@ -131,7 +135,7 @@ class Blog extends Controller {
 			}
 
 			//Load associated data
-			$posts = $this->Model->Posts->fetchAll(array('id' => $ids));
+			$posts = $this->Model->Posts->fetchAll(array('id' => $ids, 'published' => 'IS NOT NULL'));
 			$blogs = $this->Model->map($posts,'user_id','Users');
 			$blogs = $this->Model->map($posts,array('post_id','Post_Categories','category_id'),'Categories',false,$blogs);
 

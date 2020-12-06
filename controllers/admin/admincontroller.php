@@ -27,9 +27,9 @@ class AdminController extends \Controller {
 
 		//No accesss if not admin
 		if($access != $this->level){
-			//\StatusMessage::add('Access Denied','danger');
-			return $f3->error('403');
-			//return $f3->reroute('/');
+			\StatusMessage::add('Access Denied','danger');
+			//return $f3->error('403');
+			return $f3->reroute('/');
 		}
 	}
 

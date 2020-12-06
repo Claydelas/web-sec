@@ -63,7 +63,7 @@ class GenericModel extends \DB\SQL\Mapper {
 
 	/** Fetch a single item as a SQL mapped object by ID */
 	public function fetchById($id,$options=array()) {
-		return $this->fetch(array('id' => $id));
+		return $this->fetch(array('id' => $id) + $options);
 	}
 
 	/** Convert conditions array into SQL query */
