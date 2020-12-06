@@ -5,18 +5,18 @@
 <div class="col-md-6 col-md-offset-3">
 <?php
 	//Get from address from database
-	$from = '';
-	if(isset($user['email'])) {
-		$from = $user['email'];
-	}
+	//$from = '';
+	//if(isset($user['email'])) {
+	//	$from = $user['email'];
+	//}
 
 	//Get to address
-	$to = $site['email'];
+	//$to = $site['email'];
 
 	$form = new Form();
 	echo $form->start();
-	echo $form->add('from',array('type' => 'text', 'value' => $from));
-	echo $form->add('to',array('type' => 'hidden', 'value' => $to));
+	if(!$user['email']) echo $form->add('from',array('type' => 'text'));
+	//echo $form->add('to',array('type' => 'hidden', 'value' => $to));
 	echo $form->add('subject',array('type' => 'text'));
 	echo $form->add('message',array('type' => 'textarea'));
 	echo $form->add('Send',array('type' => 'submit'));
