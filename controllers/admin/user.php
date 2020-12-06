@@ -29,6 +29,7 @@ class User extends AdminController {
 	public function edit($f3) {	
 		$id = $f3->get('PARAMS.3');
 		$u = $this->Model->Users->fetchById($id);
+		if(!$u) return $f3->reroute('/admin/user');
 		if($this->request->is('post')) {
 			$post = $this->request->data;
 			//dangerous
@@ -53,6 +54,7 @@ class User extends AdminController {
 		if($this->request->is('post')) {
 			$id = $f3->get('PARAMS.3');
 			$u = $this->Model->Users->fetchById($id);
+			if(!$u) return $f3->reroute('/admin/user');
 
 			if($id == $this->Auth->user('id')) {
 				\StatusMessage::add('You cannot remove yourself','danger');

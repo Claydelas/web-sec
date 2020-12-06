@@ -101,8 +101,8 @@ class Blog extends Controller {
 		if($this->Auth->user('level') < 2) return $f3->reroute('/');
 		if($this->request->is('post')) {
 			list($id,$option) = explode("/",$f3->get('PARAMS.3'));
-			$comments = $this->Model->Comments;
-			$comment = $comments->fetchById($id);
+			$comment = $this->Model->Comments->fetchById($id);
+			if(!$comment) return $f3->reroute('/blog');
 
 			$post_id = $comment->blog_id;
 			//Approve
@@ -114,9 +114,9 @@ class Blog extends Controller {
 				$comment->erase();
 			}
 			StatusMessage::add('The comment has been moderated');
-			$f3->reroute('/blog/view/' . $comment->blog_id);
+			return $f3->reroute('/blog/view/' . $comment->blog_id);
 		}
-		$f3->reroute('/blog');
+		return $f3->reroute('/blog');
 	}
 
 	public function search($f3) {

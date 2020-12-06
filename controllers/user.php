@@ -4,6 +4,7 @@ class User extends Controller {
 	public function view($f3) {
 		$userid = $f3->get('PARAMS.3');
 		$u = $this->Model->Users->fetchById($userid);
+		if(!$u) return $f3->reroute('/');
 
 		$articles = $this->Model->Posts->fetchAll(array('user_id' => $userid));
 		$comments = $this->Model->Comments->fetchAll(array('user_id' => $userid));

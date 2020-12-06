@@ -15,6 +15,7 @@
 			if($this->request->is('post')) {
 				$postid = $f3->get('PARAMS.3');
 				$post = $this->Model->Posts->fetchById($postid);
+				if(!$post) return $f3->reroute('/admin/blog');
 				$post->erase();
 
 				//Remove from categories

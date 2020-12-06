@@ -29,6 +29,7 @@
 			if($this->request->is('post')) {
 				$categoryid = $f3->get('PARAMS.3');
 				$category = $this->Model->Categories->fetchById($categoryid);
+				if(!$category) return $f3->reroute('/admin/category');
 				$category->erase();
 
 				//Delete links		
@@ -44,7 +45,7 @@
 		public function edit($f3) {
 			$categoryid = $f3->get('PARAMS.3');
 			$category = $this->Model->Categories->fetchById($categoryid);
-			if(!$category) $f3->reroute('/admin/category');
+			if(!$category) return $f3->reroute('/admin/category');
 			if($this->request->is('post')) {
 				$category->title = $this->request->data['title'];
 				$category->save();
