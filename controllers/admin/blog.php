@@ -49,6 +49,8 @@
 					$post->published = mydate($data['published']);
 				} 
 				
+				if(!$post->check()) return $f3->reroute('/admin/blog/add');
+
 				//Save post
 				$post->save();
 				$postid = $post->id;
@@ -89,6 +91,8 @@
 				} else {
 					$post->published = mydate($data['published']);
 				} 
+
+				if(!$post->check()) return $f3->reroute("/admin/blog/edit/$postid");
 
 				//Save changes
 				$post->save();
