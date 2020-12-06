@@ -37,6 +37,9 @@ class PagesModel {
 
 	/** Load the contents of a page */
 	public function fetch($pagename) {
+		//strip any path and keep filename+ext only
+		//prevents directory traversal
+		$pagename = basename($pagename);
 		$pagedir = getcwd() . "/pages/";
 		$file = $pagedir . $pagename;
 		if(!file_exists($file)) {
