@@ -83,6 +83,8 @@ class Blog extends Controller {
 				$comment->subject = $this->request->data['subject'];
 			}
 
+			if(!$comment->check()) return $f3->reroute('/blog/view/' . $id);
+
 			$comment->save();
 
 			//Redirect

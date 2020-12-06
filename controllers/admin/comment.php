@@ -29,6 +29,9 @@ class Comment extends AdminController {
 			//$comment->copyfrom('POST');
 			$comment->subject = $post['subject'];
 			$comment->message = \HTMLPurifier::instance()->purify($post['message']);
+
+			if(!$comment->check()) return;
+
 			$comment->save();
 			\StatusMessage::add('Comment updated successfully','success');
 			return $f3->reroute('/admin/comment');
