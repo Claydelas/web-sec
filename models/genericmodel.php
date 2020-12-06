@@ -5,6 +5,28 @@ class GenericModel extends \DB\SQL\Mapper {
 	public $name;
 	protected $database;
 
+	//validates the model object
+	public function validate(){
+		//if no rules are set, assume object passes validations
+		if (!method_exists($this,'rules')) return true;
+		//validate object fields per rules defined in model class 
+		return $this->rules()->validate($this->cast());
+	}
+	//validates the model object and displays errors
+	public function check(){
+		//if no rules are set, assume object passes validations
+		if (!method_exists($this,'rules')) return true;
+		try {
+			//on valid input return true
+			$this->rules()->check($this->cast());
+			return true;
+		} catch(Exception $exception) {
+			//on invalid input return false and display message
+			StatusMessage::add($exception->getMessage(),'danger');
+		}
+		return false;
+	}
+
 	/** Set up a new SQL mapped object */
 	public function __construct($name,$db) {		
 		parent::__construct($db->connection,strtolower($name));

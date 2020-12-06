@@ -36,12 +36,16 @@ class User extends AdminController {
 			//$u->copyfrom('POST');
 			$u->username = $post['username'];
 			$u->displayname = $post['displayname'];
-			// hash new password if such is provided
-			if(!empty($post['password'])) $u->setPassword($post['password']);
+			if(!empty($post['password'])) $u->password = $post['password'];
 			$u->level = $post['level'];
 			$u->bio = \HTMLPurifier::instance()->purify($post['bio']);
 			$u->avatar = $post['avatar'];
 			
+			if(!$u->check()) return;
+
+			// hash new password if such is provided
+			if(!empty($post['password'])) $u->setPassword($post['password']);
+
 			$u->save();
 			\StatusMessage::add('User updated successfully','success');
 			return $f3->reroute('/admin/user');

@@ -39,11 +39,15 @@ class User extends Controller {
 				$user->displayname = $data['displayname'];
 			}
 			$user->email = $data['email'];
-			$user->setPassword($data['password']);
+			$user->password = $data['password'];
 			$user->level = 1;
 			$user->created = mydate();
 			$user->bio = '';
 			$user->avatar = '';
+
+			if(!$user->check()) return;
+
+			$user->setPassword($data['password']);
 
 			$user->save();	
 			StatusMessage::add('Registration complete','success');
@@ -101,8 +105,7 @@ class User extends Controller {
 			//dangerous
 			//$u->copyfrom('POST');
 			$u->displayname = $post['displayname'];
-			// hash new password if such is provided
-			if(!empty($post['password'])) $u->setPassword($post['password']);
+			if(!empty($post['password'])) $u->password = $post['password'];
 			$u->bio = \HTMLPurifier::instance()->purify($post['bio']);
 
 			//Handle avatar upload
@@ -117,6 +120,11 @@ class User extends Controller {
 			} else if(isset($reset)) {
 				$u->avatar = '';
 			}
+
+			if(!$u->check()) return;
+
+			// hash new password
+			if(!empty($post['password'])) $u->setPassword($post['password']);
 
 			$u->save();
 			\StatusMessage::add('Profile updated successfully','success');
