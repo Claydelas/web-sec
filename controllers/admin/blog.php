@@ -80,18 +80,23 @@
 		public function edit($f3) {
 			$postid = $f3->get('PARAMS.3');
 			$post = $this->Model->Posts->fetchById($postid);
+			if(!$post) return $f3->reroute('/admin/blog');
 			$blog = $this->Model->map($post,array('post_id','Post_Categories','category_id'),'Categories',false);
 			if ($this->request->is('post')) {
-				extract($this->request->data);
-				$post->copyfrom('POST');
+				$data = $this->request->data;
+				//dangerous
+				//$post->copyfrom('POST');
+				$post->title = $data['title'];
+				$post->summary = $data['summary'];
+				$post->content = \HTMLPurifier::instance()->purify($data['content']);
 				$post->modified = mydate();
 				$post->user_id = $this->Auth->user('id');
 				
 				//Determine whether to publish or draft
-				if(!isset($Publish)) {
+				if(!isset($data['Publish'])) {
 					$post->published = null;
 				} else {
-					$post->published = mydate($published);
+					$post->published = mydate($data['published']);
 				} 
 
 				//Save changes

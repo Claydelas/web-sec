@@ -55,6 +55,7 @@ class Blog extends Controller {
 	public function comment($f3) {
 		$id = $f3->get('PARAMS.3');
 		$post = $this->Model->Posts->fetchById($id);
+		if(!$post) return $f3->reroute('/blog');
 		if($this->request->is('post')) {
 			$comment = $this->Model->Comments;
 			//copyfrom could allow override of id column
@@ -88,6 +89,7 @@ class Blog extends Controller {
 			}
 			return $f3->reroute('/blog/view/' . $id);
 		}
+		return $f3->reroute('/blog');
 	}
 
 	public function moderate($f3) {
