@@ -30,15 +30,22 @@ class User extends AdminController {
 		$id = $f3->get('PARAMS.3');
 		$u = $this->Model->Users->fetchById($id);
 		if($this->request->is('post')) {
-			$oldpass = $u->password;
-			$u->copyfrom('POST');
+			$post = $this->request->data;
+			//dangerous
+			//$u->copyfrom('POST');
+			$u->username = $post['username'];
+			$u->displayname = $post['displayname'];
 			// hash new password if such is provided
-			empty($u->password) ? $u->password = $oldpass : $u->setPassword($this->request->data['password']);
+			if(!empty($post['password'])) $u->setPassword($post['password']);
+			$u->level = $post['level'];
+			$u->bio = \HTMLPurifier::instance()->purify($post['bio']);
+			$u->avatar = $post['avatar'];
+			
 			$u->save();
 			\StatusMessage::add('User updated successfully','success');
 			return $f3->reroute('/admin/user');
-		}			
-		$_POST = $u->cast();
+		}
+		$_POST = $u->cast();			
 		$f3->set('u',$u);
 	}
 

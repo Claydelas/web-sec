@@ -85,13 +85,15 @@ class User extends Controller {
 
 	public function profile($f3) {	
 		$id = $this->Auth->user('id');
-		extract($this->request->data);
 		$u = $this->Model->Users->fetchById($id);
-		$oldpass = $u->password;
 		if($this->request->is('post')) {
-			$u->copyfrom('POST');
+			$post = $this->request->data;
+			//dangerous
+			//$u->copyfrom('POST');
+			$u->displayname = $post['displayname'];
 			// hash new password if such is provided
-			empty($u->password) ? $u->password = $oldpass : $u->setPassword($password);
+			if(!empty($post['password'])) $u->setPassword($post['password']);
+			$u->bio = \HTMLPurifier::instance()->purify($post['bio']);
 
 			//Handle avatar upload
 			if(isset($_FILES['avatar']) && isset($_FILES['avatar']['tmp_name']) && !empty($_FILES['avatar']['tmp_name'])) {

@@ -56,6 +56,7 @@ class Controller {
 		//Extract request data
 		extract($this->request->data);
 
+		//TODO:
 		//Process before route code
 		if(isset($beforeCode)) {
 			Settings::process($beforeCode);
