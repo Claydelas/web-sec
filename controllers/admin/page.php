@@ -24,7 +24,7 @@ class Page extends AdminController {
 		if ($this->request->is('post')) {
 			$pages = $this->Model->Pages;
 			$pages->title = $pagename;
-			$pages->content = $this->request->data['content'];
+			$pages->content = \HTMLPurifier::instance()->purify($this->request->data['content']);
 			$pages->save();
 
 			\StatusMessage::add('Page updated successfully','success');
