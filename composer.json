@@ -1,6 +1,7 @@
 {
     "require": {
         "bcosca/fatfree": "^3.7",
-        "ezyang/htmlpurifier": "^4.13.0"
+        "ezyang/htmlpurifier": "^4.13.0",
+        "respect/validation" : "^2.1.0"
     }
 }

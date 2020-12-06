@@ -7,8 +7,37 @@ namespace Composer\Autoload;
 class ComposerStaticInit043cbf4ae0508c49f665d1a5973c08c0
 {
     public static $files = array (
+        '2df68f9e79c919e2d88506611769ed2e' => __DIR__ . '/..' . '/respect/stringifier/src/stringify.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '45e8c92354af155465588409ef796dbc' => __DIR__ . '/..' . '/bcosca/fatfree/lib/base.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
+    );
+
+    public static $prefixLengthsPsr4 = array (
+        'S' => 
+        array (
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+        ),
+        'R' => 
+        array (
+            'Respect\\Validation\\' => 19,
+            'Respect\\Stringifier\\' => 20,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Respect\\Validation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/respect/validation/library',
+        ),
+        'Respect\\Stringifier\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/respect/stringifier/src',
+        ),
     );
 
     public static $prefixesPsr0 = array (
@@ -24,6 +53,8 @@ class ComposerStaticInit043cbf4ae0508c49f665d1a5973c08c0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInit043cbf4ae0508c49f665d1a5973c08c0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit043cbf4ae0508c49f665d1a5973c08c0::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit043cbf4ae0508c49f665d1a5973c08c0::$prefixesPsr0;
 
         }, null, ClassLoader::class);
