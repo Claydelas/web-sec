@@ -32,46 +32,36 @@
 		public function add($f3) {
 			if($this->request->is('post')) {
 				$post = $this->Model->Posts;
-				extract($this->request->data);
-				$post->title = $title;
-				$post->content = $content;
-				$post->summary = $summary;
-				$post->user_id = $this->Auth->user('id');	
-				$post->created = $post->modified = mydate();
+				$data = $this->request->data;
 
-				//Check for errors
-				$errors = false;
-				if(empty($post->title)) {
-					$errors = 'You did not specify a title';
-				}
-
-				if($errors) {
-					\StatusMessage::add($errors,'danger');
+				$post->title = $data['title'];
+				$post->summary = $data['summary'];
+				$post->content = \HTMLPurifier::instance()->purify($data['content']);
+				$post->created = mydate();
+				$post->modified = $post->created;
+				$post->user_id = $this->Auth->user('id');
+				
+				//Determine whether to publish or draft
+				if(!isset($data['Publish'])) {
+					$post->published = null;
 				} else {
-					//Determine whether to publish or draft
-					if(!isset($Publish)) {
-						$post->published = null;
-					} else {
-						$post->published = mydate($this->request->data['published']);
-					}
-
-					//Save post
-					$post->save();
-					$postid = $post->id;
-
-					//Now assign categories
-					$link = $this->Model->Post_Categories;
-					if(!isset($categories)) { $categories = array(); }
-					foreach($categories as $category) {
-						$link->reset();
-						$link->category_id = $category;
-						$link->post_id = $postid;
-						$link->save();
-					}
-
-					\StatusMessage::add('Post added successfully','success');
-					return $f3->reroute('/admin/blog');
+					$post->published = mydate($data['published']);
+				} 
+				
+				//Save post
+				$post->save();
+				$postid = $post->id;
+				//Now assign categories
+				$link = $this->Model->Post_Categories;
+				if(!isset($data['categories'])) { $data['categories'] = array(); }
+				foreach($data['categories'] as $category) {
+					$link->reset();
+					$link->category_id = $category;
+					$link->post_id = $postid;
+					$link->save();
 				}
+				\StatusMessage::add('Post added successfully','success');
+				return $f3->reroute('/admin/blog');
 			}
 			$categories = $this->Model->Categories->fetchList();
 			$f3->set('categories',$categories);
@@ -110,8 +100,8 @@
 				}
 				
 				//Now assign new categories				
-				if(!isset($categories)) { $categories = array(); }
-				foreach($categories as $category) {
+				if(!isset($data['categories'])) { $data['categories'] = array(); }
+				foreach($data['categories'] as $category) {
 					$link->reset();
 					$link->category_id = $category;
 					$link->post_id = $postid;
