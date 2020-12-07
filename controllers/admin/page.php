@@ -14,6 +14,10 @@ class Page extends AdminController {
 	public function add($f3) {
 		if($this->request->is('post')) {
 			$pagename = strtolower(str_replace(" ","_",$this->request->data['title']));
+			if(array_key_exists(strtolower($pagename), array_change_key_case($this->Model->Pages->fetchAll()))){
+				\StatusMessage::add('Page already exists.','danger');
+				return $f3->reroute('/admin/page');
+			}
 			try {
 				v::StringType()->notOptional()->not(v::startsWith(' '))
 					->check($this->request->data['title']);
@@ -51,7 +55,8 @@ class Page extends AdminController {
 	public function delete($f3) {
 		if($this->request->is('post')) {
 			$pagename = $f3->get('PARAMS.3');
-			if(!$pagename) $f3->reroute('/admin/page');
+			if(!array_key_exists(strtolower($pagename), array_change_key_case($this->Model->Pages->fetchAll())))
+				return $f3->reroute('/admin/page');
 			$this->Model->Pages->delete($pagename);	
 			\StatusMessage::add('Page deleted successfully','success');
 			return $f3->reroute('/admin/page');

@@ -24,13 +24,13 @@ class Comment extends AdminController {
 		$comment = $this->Model->Comments->fetchById($id);
 		if(!$comment) return $f3->reroute('/admin/comment');
 		if($this->request->is('post')) {
-			$post = $this->request->data;
+			$data = $this->request->data;
 			//dangerous
 			//$comment->copyfrom('POST');
-			$comment->subject = $post['subject'];
-			$comment->message = \HTMLPurifier::instance()->purify($post['message']);
+			$comment->subject = $data['subject'];
+			$comment->message = \HTMLPurifier::instance()->purify($data['message']);
 
-			if(!$comment->check()) return;
+			if(!$comment->check()) return $f3->reroute("/admin/comment/edit/$id");
 
 			$comment->save();
 			\StatusMessage::add('Comment updated successfully','success');

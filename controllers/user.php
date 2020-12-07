@@ -22,8 +22,8 @@ class User extends Controller {
 				StatusMessage::add('User already exists','danger');
 				return;
 			}
-			if($this->Model->Users->fetch(['displayname' => $data['displayname']])){
-				StatusMessage::add('Display name already exists','danger');
+			if($this->Model->Users->fetch(['email' => $data['email']])){
+				StatusMessage::add('User with this email already exists','danger');
 				return;
 			}
 			if($data['password'] != $data['password2']) {
@@ -33,7 +33,7 @@ class User extends Controller {
 			
 			$user = $this->Model->Users;
 			$user->username = $data['username'];
-			if(empty($data['displayname']) && !$this->Model->Users->fetch(['displayname' => $data['username']])) {
+			if(empty($data['displayname'])) {
 				$user->displayname = $data['username'];
 			} else {
 				$user->displayname = $data['displayname'];
@@ -107,6 +107,7 @@ class User extends Controller {
 	public function profile($f3) {	
 		$id = $this->Auth->user('id');
 		$u = $this->Model->Users->fetchById($id);
+		if(!$u) return $f3->reroute('/user/add');
 		if($this->request->is('post')) {
 			$post = $this->request->data;
 			//dangerous
@@ -128,7 +129,7 @@ class User extends Controller {
 				$u->avatar = '';
 			}
 
-			if(!$u->check()) return;
+			if(!$u->check()) return $f3->reroute('/user/profile');
 
 			// hash new password
 			if(!empty($post['password'])) $u->setPassword($post['password']);

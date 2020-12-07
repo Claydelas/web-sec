@@ -56,11 +56,12 @@ class Controller {
 		//Extract request data
 		extract($this->request->data);
 
-		//TODO:
+		//This looks spooky, eval() on user input? probably shouldn't be in here
+		//Also not used anywhere
 		//Process before route code
-		if(isset($beforeCode)) {
-			Settings::process($beforeCode);
-		}
+		//if(isset($beforeCode)) {
+			//Settings::process($beforeCode);
+		//}
 	}
 
 	public function afterRoute($f3) {	
@@ -116,10 +117,12 @@ class Controller {
 		$content = View::instance()->render($template);
 		$f3->set('content',$content);
 
+		//This looks spooky, eval() on user input? probably shouldn't be in here
+		//Also not used anywhere
 		//Process before route code
-		if(isset($afterCode)) {
-			Settings::process($afterCode);
-		}
+		//if(isset($afterCode)) {
+			//Settings::process($afterCode);
+		//}
 
 		/* Because f3 ESCAPE is true to begin with (from global config), everything  is
 		escaped properly while rendering $template and stored in $content.

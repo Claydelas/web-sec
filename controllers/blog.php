@@ -123,7 +123,8 @@ class Blog extends Controller {
 
 	public function search($f3) {
 		if($this->request->is('post')) {
-			extract($this->request->data);
+			$search = $this->request->data['search'];
+			//extract($this->request->data);
 			$f3->set('search',$search);
 
 			//Get search results

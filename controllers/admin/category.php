@@ -16,6 +16,10 @@
 
 		public function add($f3) {
 			if($this->request->is('post')) {
+				if($this->Model->Categories->fetch(['title' => $this->request->data['title']])){
+					\StatusMessage::add('Category already exists.','danger');
+					return $f3->reroute('/admin/category');
+				}
 				$category = $this->Model->Categories;
 				$category->title = $this->request->data['title'];
 				
@@ -49,8 +53,12 @@
 			$category = $this->Model->Categories->fetchById($categoryid);
 			if(!$category) return $f3->reroute('/admin/category');
 			if($this->request->is('post')) {
+				if($this->Model->Categories->fetch(['title' => $this->request->data['title']])){
+					\StatusMessage::add('Category already exists.','danger');
+					return $f3->reroute("/admin/category/edit/$categoryid");
+				}
 				$category->title = $this->request->data['title'];
-				if(!$category->check()) return;
+				if(!$category->check()) return $f3->reroute("/admin/category/edit/$categoryid");;
 				$category->save();
 				\StatusMessage::add('Category updated successfully','success');
 				return $f3->reroute('/admin/category');

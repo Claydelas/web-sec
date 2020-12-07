@@ -34,6 +34,11 @@ class User extends AdminController {
 			$post = $this->request->data;
 			//dangerous
 			//$u->copyfrom('POST');
+			if($this->Model->Users->fetch(['username' => $post['username']])){
+				\StatusMessage::add('User with this username already exists.','danger');
+				return $f3->reroute("/admin/user/edit/$id");
+			}
+
 			$u->username = $post['username'];
 			$u->displayname = $post['displayname'];
 			if(!empty($post['password'])) $u->password = $post['password'];
@@ -41,7 +46,7 @@ class User extends AdminController {
 			$u->bio = \HTMLPurifier::instance()->purify($post['bio']);
 			$u->avatar = $post['avatar'];
 			
-			if(!$u->check()) return;
+			if(!$u->check()) return $f3->reroute("/admin/user/edit/$id");
 
 			// hash new password if such is provided
 			if(!empty($post['password'])) $u->setPassword($post['password']);

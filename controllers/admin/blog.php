@@ -46,7 +46,10 @@
 				if(!isset($data['Publish'])) {
 					$post->published = null;
 				} else {
-					$post->published = mydate($data['published']);
+					//logic check
+					$data['published'] < $post->created
+					? $post->published = $post->created
+					: $post->published = mydate($data['published']);
 				} 
 				
 				if(!$post->check()) return $f3->reroute('/admin/blog/add');
@@ -58,10 +61,13 @@
 				$link = $this->Model->Post_Categories;
 				if(!isset($data['categories'])) { $data['categories'] = array(); }
 				foreach($data['categories'] as $category) {
-					$link->reset();
-					$link->category_id = $category;
-					$link->post_id = $postid;
-					if($link->validate()) $link->save();
+					if($this->Model->Categories->fetchById($category) &&
+					$this->Model->Posts->fetchById($postid)){
+						$link->reset();
+						$link->category_id = $category;
+						$link->post_id = $postid;
+						$link->save();
+					}
 				}
 				\StatusMessage::add('Post added successfully','success');
 				return $f3->reroute('/admin/blog');
@@ -89,7 +95,10 @@
 				if(!isset($data['Publish'])) {
 					$post->published = null;
 				} else {
-					$post->published = mydate($data['published']);
+					//logic check
+					$data['published'] < $post->created
+					? $post->published = $post->created
+					: $post->published = mydate($data['published']);
 				} 
 
 				if(!$post->check()) return $f3->reroute("/admin/blog/edit/$postid");
@@ -107,10 +116,13 @@
 				//Now assign new categories				
 				if(!isset($data['categories'])) { $data['categories'] = array(); }
 				foreach($data['categories'] as $category) {
-					$link->reset();
-					$link->category_id = $category;
-					$link->post_id = $postid;
-					if($link->validate()) $link->save();
+					if($this->Model->Categories->fetchById($category) &&
+					$this->Model->Posts->fetchById($postid)){
+						$link->reset();
+						$link->category_id = $category;
+						$link->post_id = $postid;
+						$link->save();
+					}
 				}
 
 				\StatusMessage::add('Post updated successfully','success');
