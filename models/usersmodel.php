@@ -19,7 +19,7 @@ class UsersModel extends GenericModel {
 			->key('level', v::intVal()->notOptional()->between(0, 2))
 			->key('created', v::dateTime('Y-m-d H:i:s')->notOptional()->between(null, new DateTime('now')))
 			->key('bio', v::optional(v::StringType()))
-			->key('avatar', v::when(v::notOptional(),v::regex('/\/uploads\/.*/'),v::StringType()));
+			->key('avatar', v::when(v::notOptional(),v::regex('/\/uploads\/.+/'),v::StringType()));
 	}
 
 }

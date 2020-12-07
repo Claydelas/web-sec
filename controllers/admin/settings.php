@@ -12,6 +12,7 @@ class Settings extends AdminController {
 			foreach($settings as $setting) {
 				if(isset($this->request->data[$setting->setting])) {
 					$setting->value = $this->request->data[$setting->setting];
+					if(!$setting->check()) return $f3->reroute('/admin/settings');
 					$setting->save();
 				} else {
 					$setting->value = 0;
