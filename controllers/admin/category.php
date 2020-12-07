@@ -18,9 +18,11 @@
 			if($this->request->is('post')) {
 				$category = $this->Model->Categories;
 				$category->title = $this->request->data['title'];
-				$category->save();
-
-				\StatusMessage::add('Category added successfully','success');
+				
+				if($category->check()){
+					$category->save();
+					\StatusMessage::add('Category added successfully','success');
+				}
 				return $f3->reroute('/admin/category');
 			}
 		}
@@ -48,6 +50,7 @@
 			if(!$category) return $f3->reroute('/admin/category');
 			if($this->request->is('post')) {
 				$category->title = $this->request->data['title'];
+				if(!$category->check()) return;
 				$category->save();
 				\StatusMessage::add('Category updated successfully','success');
 				return $f3->reroute('/admin/category');
