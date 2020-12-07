@@ -114,7 +114,7 @@
 				'expires' => $expires->format('U'),
 				'path' => '/',
 				'domain' => "",
-				'secure' => false,
+				'secure' => true,
 				'httponly' => true,
 				'samesite' => 'Strict',
 			]);
