@@ -194,3 +194,16 @@ CREATE TABLE `auth` (
     `expires` datetime,
     PRIMARY KEY (`id`)
 );
+
+--
+-- Table structure for table `login_attempts`
+--
+
+DROP TABLE IF EXISTS `login_attempts`;
+CREATE TABLE `login_attempts` (
+    `id` integer(11) not null AUTO_INCREMENT,
+    `ip` char(45) not null,
+    `attempts` integer(11) not null DEFAULT 0,
+    `last_attempt` datetime,
+    PRIMARY KEY (`id`)
+);

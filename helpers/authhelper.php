@@ -36,6 +36,23 @@
 			//DO NOT check login when in debug mode
 			if($debug == 1) { return true; }
 
+			if($request->is('post')){
+				$user = $this->controller->Model->Users->fetch(['username' => $username]);
+
+				$validinfo = $user && password_verify($password,$user->password);
+				$invalidcaptcha = array_key_exists('captcha',$request->data)
+									&& Base::instance()->get('SESSION.captcha') != $request->data['captcha'];
+
+				if(!$validinfo || $invalidcaptcha){
+					$model = $this->controller->Model->Login_Attempts->fetch(['ip' => $_SERVER['REMOTE_ADDR']]);
+					if(!$model) $model = $this->controller->Model->Login_Attempts;
+					$model->ip = $_SERVER['REMOTE_ADDR'];
+					$model->attempts = $model->attempts + 1;
+					$model->last_attempt = mydate();
+					$model->save();
+					return false;
+				}
+			}
 			return true;	
 		}
 

@@ -80,14 +80,21 @@ class User extends Controller {
 
 	/* Handle after logging in */
 	private function afterLogin($f3) {
-				StatusMessage::add('Logged in successfully','success');
+		StatusMessage::add('Logged in successfully','success');
 
-				//Redirect to where they came from
-				if(isset($_GET['from']) && $_GET['from'] != '/user/login') {
-					$f3->reroute($_GET['from']);
-				} else {
-					$f3->reroute('/');	
-				}
+		$model = $this->Model->Login_Attempts->fetch(['ip' => $_SERVER['REMOTE_ADDR']]);
+		if($model) {
+			$model->attempts = 0;
+			$model->last_attempt = null;
+			$model->save();
+		}
+
+		//Redirect to where they came from
+		if(isset($_GET['from']) && $_GET['from'] != '/user/login') {
+			$f3->reroute($_GET['from']);
+		} else {
+			$f3->reroute('/');	
+		}
 	}
 
 	public function logout($f3) {

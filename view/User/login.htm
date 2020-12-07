@@ -8,6 +8,14 @@
 	echo $form->start();
 	echo $form->add('username');
 	echo $form->add('password',array('type' => 'password','value' => ''));
+
+	$ints = Captcha::gen();
+	if(Captcha::mustShow()):?>
+		<div class="form-group">
+			<label for="captcha">What's <?=$ints['int1']?> + <?=$ints['int2']?>?</label>
+			<input type="text" class="form-control" id="captcha" name="captcha" placeholder="" value=""> 
+		</div>
+	<?endif;
 	echo $form->add('Login',array('type' => 'submit'));
 	echo $form->end();
 ?>
