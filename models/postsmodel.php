@@ -13,9 +13,9 @@ class PostsModel extends GenericModel {
 			->key('created', v::dateTime('Y-m-d H:i:s')->notOptional()->between(null, new DateTime('now')))
 			->key('modified', v::dateTime('Y-m-d H:i:s')->notOptional()->between(null, new DateTime('now')))
 			->key('published', v::optional(v::dateTime('Y-m-d H:i:s')->between(null, new DateTime('now'))))
-			->key('title', v::StringType()->notOptional())
-			->key('summary', v::StringType()->notOptional())
-			->key('content', v::StringType()->notOptional());
+			->key('title', v::StringType()->notOptional()->not(v::startsWith(' ')))
+			->key('summary', v::optional(v::StringType()))
+			->key('content', v::optional(v::StringType()));
 	}
 
 }

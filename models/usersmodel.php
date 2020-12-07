@@ -10,7 +10,7 @@ class UsersModel extends GenericModel {
 	}		
 	public function rules(){
 		return v::key('username', v::Alnum('_')->notOptional()->noWhitespace()->length(1,32))
-			->key('displayname', v::Alnum()->notOptional()->length(1,32))
+			->key('displayname', v::Alnum()->notOptional()->not(v::startsWith(' '))->length(1,32))
 			->key('email', v::email())
 			->key('password', v::Alnum(
 				'!','"','#','$','%','&','\'','(',')','*','+',

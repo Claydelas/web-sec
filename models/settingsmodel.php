@@ -18,15 +18,15 @@ class SettingsModel extends GenericModel {
 	public function rules(){
 		switch ($this->setting) {
 			case "name":
-				return v::key('value', v::StringType()->notOptional());
+				return v::key('value', v::StringType()->notOptional()->not(v::startsWith(' ')));
 			case "front_title":
-				return v::key('value', v::StringType()->notOptional());
+				return v::key('value', v::optional(v::StringType()));
 			case "comments":
 				return v::key('value', v::intVal()->notOptional()->between(0, 1));
 			case "moderate":
 				return v::key('value', v::intVal()->notOptional()->between(0, 1));
 			case "subtitle":
-				return v::key('value', v::StringType()->notOptional());
+				return v::key('value', v::optional(v::StringType()));
 			case "email":
 				return v::key('value', v::oneOf(v::email(),v::regex('/.+@.+/')));
 			case "debug":
